@@ -1,23 +1,33 @@
-import axiosInstance from './axios';
+import axios from 'axios';
+import { API_URL } from '../urls/url';
 
-export const OWNER = 'facebook';
-export const REPO = 'react';
-const PATH_ISSUES = `/repos/${OWNER}/${REPO}/issues`;
-const SORT_TYPE = 'comments';
-const PER_PAGE = '20';
+const axiosInstance = axios.create({
+	baseURL: 'https://api.github.com',
+	headers: {
+		Accept: 'application/vnd.github.v3+json',
+	},
+});
 
-export const getIssueList = async (page) => {
-	const result = await axiosInstance.get(PATH_ISSUES, {
-		params: {
-			sort: SORT_TYPE,
-			per_page: PER_PAGE,
-			page: page,
-		},
-	});
-	return result.data;
+axiosInstance.interceptors.request.use((request) => {
+	const ACCESS_TOKEN = process.env.REACT_APP_GITHUB_ACCESS_TOKEN;
+	if (ACCESS_TOKEN) request.headers['Authorization'] = `Bearer ${ACCESS_TOKEN}`;
+	if (!ACCESS_TOKEN) request.headers['Authorization'] = '';
+	return request;
+});
+
+export const getIssueList = async (queryParams) => {
+	const response = await axiosInstance.get(
+		`/repos/${API_URL.owner}/${API_URL.repo}/issues`,
+		{
+			params: queryParams,
+		}
+	);
+	return response.data;
 };
 
-export const getIssue = async (issue_number) => {
-	const response = await axiosInstance.get(`${PATH_ISSUES}/${issue_number}`);
+export const getIssueDetail = async (issueId) => {
+	const response = await axiosInstance.get(
+		`/repos/${API_URL.owner}/${API_URL.repo}/issues/${issueId}`
+	);
 	return response.data;
 };
