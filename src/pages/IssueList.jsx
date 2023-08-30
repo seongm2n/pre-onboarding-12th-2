@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import IssueItem from '../components/IssueItem';
 import { getIssueList } from '../utils/apis/issues';
