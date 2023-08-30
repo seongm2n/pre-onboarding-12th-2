@@ -15,7 +15,7 @@ export const router = createBrowserRouter([
 				index: true,
 				element: (
 					<Navigate
-						to={`/repos/${API_URL.organization}/${API_URL.repository}/issues`}
+						to={`/repos/${API_URL.owner}/${API_URL.repo}/issues`}
 					/>
 				),
 			},
