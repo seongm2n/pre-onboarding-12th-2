@@ -1,37 +1,36 @@
-import { React, useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
+import styled from 'styled-components';
 import IssueItem from '../components/IssueItem';
 import { getIssueList } from '../utils/apis/issues';
 import { Link } from 'react-router-dom';
-import { API_URL } from '../utils/urls/url';
+import { API_URL, AD_URL } from '../utils/urls/url';
+import Loading from '../components/Layout/Loading';
+import { useIssueContext } from '../context/IssueContext';
 
 function IssueList() {
-	const [issues, setIssues] = useState([]);
-	const [page, setPage] = useState(1);
-	const [loading, setLoading] = useState(false);
+	const { state, dispatch } = useIssueContext();
 
 	const loadMore = useCallback(async () => {
-		if (loading) return;
-		setLoading(true);
-
-		const queryParams = {
-			sort: 'comments',
-			per_page: 20,
-			page,
-			state: 'open',
-		};
-
+		dispatch({ type: 'SET_LOADING', payload: true });
 		try {
-			const newIssues = await getIssueList(queryParams);
+			const newIssues = await getIssueList({
+				sort: 'comments',
+				per_page: 20,
+				page: state.page,
+				state: 'open',
+			});
 			if (newIssues && newIssues.length > 0) {
-				setIssues((prevIssues) => [...prevIssues, ...newIssues]);
-				setPage((prevPage) => prevPage + 1);
+				dispatch({ type: 'ADD_ISSUES', payload: newIssues });
+				dispatch({ type: 'INCREMENT_PAGE' });
+			} else {
+				dispatch({ type: 'SET_REACHED_END', payload: true });
 			}
 		} catch (error) {
 			console.error('이슈 페칭 에러', error.message);
 		} finally {
-			setLoading(false);
+			dispatch({ type: 'SET_LOADING', payload: false });
 		}
-	}, [loading, page]);
+	}, [dispatch, state.page]);
 
 	useEffect(() => {
 		loadMore();
@@ -48,25 +47,51 @@ function IssueList() {
 		};
 		window.addEventListener('scroll', scroll);
 		return () => window.removeEventListener('scroll', scroll);
-	}, [loadMore, loading]);
+	}, [loadMore, state.loading]);
 
 	return (
-		<div>
-			<div>
-				<ul>
-					{issues.map((issue) => (
+		<Container>
+			<Ul>
+				{state.issues.map((issue, index) => (
+					<>
 						<Link
-							key={issue.number}
+							key={issue.number + index}
 							to={`/repos/${API_URL.owner}/${API_URL.repo}/issues/${issue.number}`}
 						>
 							<IssueItem issue={issue} />
 						</Link>
-					))}
-				</ul>
-				{loading && <p>Loading...</p>}
-			</div>
-		</div>
+						{index % 4 === 3 && (
+							<Link to={`${AD_URL.to}`}>
+								<AdImg
+									src={`${AD_URL.img}`}
+									alt='Ad'
+								/>
+							</Link>
+						)}
+					</>
+				))}
+			</Ul>
+			{state.loading && !state.reachedEnd && <Loading />}
+		</Container>
 	);
 }
 
 export default IssueList;
+
+const Container = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 20px;
+	flex-direction: column;
+`;
+
+const Ul = styled.ul`
+	padding: 0;
+`;
+
+const AdImg = styled.img`
+	display: block;
+	margin: 20px auto 20px;
+	align-content: center;
+`;
