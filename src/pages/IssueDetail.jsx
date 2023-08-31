@@ -81,6 +81,6 @@ const MarkdownPreviewContainer = styled.div`
 	display: flex;
 	align-items: center;
 	flex-direction: column;
-	width: 600px;
+	width: 900px;
 	margin: 10px;
 `;
