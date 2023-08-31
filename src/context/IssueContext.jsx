@@ -36,7 +36,7 @@ export const IssueProvider = ({ children }) => {
 export const useIssueContext = () => {
 	const context = useContext(IssueContext);
 	if (!context) {
-		throw new Error('useIssueContext must be used within an IssueProvider');
+		throw new Error('IssueProvider를 같이 써줘야 함');
 	}
 	return context;
 };
