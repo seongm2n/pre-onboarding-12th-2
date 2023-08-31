@@ -19,8 +19,8 @@ export const router = createBrowserRouter([
 					/>
 				),
 			},
-			{ path: '/repos/:owner/:repo/issues', element: <IssueList /> },
-			{ path: '/repos/:owner/:repo/issues/:id', element: <IssueDetail /> },
+			{ path: `/repos/${API_URL.owner}/${API_URL.repo}/issues`, element: <IssueList /> },
+			{ path: `/repos/${API_URL.owner}/${API_URL.repo}/issues/:id`, element: <IssueDetail /> },
 		],
 	},
 ]);

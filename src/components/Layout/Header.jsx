@@ -1,22 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useNavigate, useParams } from 'react-router-dom';
+import { API_URL } from '../../utils/urls/url';
 
 function Header() {
-	const { owner, repo } = useParams();
-	const navigate = useNavigate();
-
-	const isValidPath = owner && repo;
-
-	if (!isValidPath) {
-		navigate('/notfound');
-		return null;
-	}
-
 	return (
 		<HeaderContainer>
 			<HeaderText>
-				{owner} / {repo}
+				{API_URL.owner}/ {API_URL.repo}
 			</HeaderText>
 		</HeaderContainer>
 	);
