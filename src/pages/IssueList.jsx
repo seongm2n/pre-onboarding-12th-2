@@ -10,12 +10,17 @@ import { useIssueContext } from '../context/IssueContext';
 function IssueList() {
 	const { state, dispatch } = useIssueContext();
 
+	const uniqueIssues = state.issues.filter(
+		(issue, index, self) =>
+			self.findIndex((i) => i.number === issue.number) === index
+	);
+
 	const loadMore = useCallback(async () => {
 		dispatch({ type: 'SET_LOADING', payload: true });
 		try {
 			const newIssues = await getIssueList({
 				sort: 'comments',
-				per_page: 20,
+				per_page: 30,
 				page: state.page,
 				state: 'open',
 			});
@@ -52,10 +57,9 @@ function IssueList() {
 	return (
 		<Container>
 			<Ul>
-				{state.issues.map((issue, index) => (
-					<>
+				{uniqueIssues.map((issue, index) => (
+					<React.Fragment key={issue.number}>
 						<Link
-							key={issue.number + index}
 							to={`/repos/${API_URL.owner}/${API_URL.repo}/issues/${issue.number}`}
 						>
 							<IssueItem issue={issue} />
@@ -68,7 +72,7 @@ function IssueList() {
 								/>
 							</Link>
 						)}
-					</>
+					</React.Fragment>
 				))}
 			</Ul>
 			{state.loading && !state.reachedEnd && <Loading />}
