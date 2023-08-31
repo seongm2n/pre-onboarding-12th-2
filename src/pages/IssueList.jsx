@@ -11,8 +11,10 @@ function IssueList() {
 	const { state, dispatch } = useIssueContext();
 
 	const uniqueIssues = state.issues.filter(
-		(issue, index, self) =>
-			self.findIndex((i) => i.number === issue.number) === index
+		(issue, index) =>
+			state.issues.findIndex(
+				(currentIssue) => currentIssue.number === issue.number
+			) === index
 	);
 
 	const loadMore = useCallback(async () => {
