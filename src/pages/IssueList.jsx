@@ -2,12 +2,13 @@ import React, { useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import IssueItem from '../components/IssueItem';
 import { getIssueList } from '../utils/apis/issues';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { API_URL, AD_URL } from '../utils/urls/url';
 import Loading from '../components/Layout/Loading';
 import { useIssueContext } from '../context/IssueContext';
 
 function IssueList() {
+	const navigate = useNavigate();
 	const { state, dispatch } = useIssueContext();
 
 	const uniqueIssues = state.issues.filter(
@@ -34,10 +35,11 @@ function IssueList() {
 			}
 		} catch (error) {
 			console.error('이슈 페칭 에러', error.message);
+			navigate('/notfound');
 		} finally {
 			dispatch({ type: 'SET_LOADING', payload: false });
 		}
-	}, [dispatch, state.page]);
+	}, [dispatch, navigate, state.page]);
 
 	useEffect(() => {
 		loadMore();
