@@ -19,6 +19,8 @@ function IssueList() {
 	);
 
 	const loadMore = useCallback(async () => {
+		if (state.loading) return;
+
 		dispatch({ type: 'SET_LOADING', payload: true });
 		try {
 			const newIssues = await getIssueList({
@@ -39,7 +41,7 @@ function IssueList() {
 		} finally {
 			dispatch({ type: 'SET_LOADING', payload: false });
 		}
-	}, [dispatch, navigate, state.page]);
+	}, [dispatch, navigate, state.page, state.loading]);
 
 	useEffect(() => {
 		loadMore();
