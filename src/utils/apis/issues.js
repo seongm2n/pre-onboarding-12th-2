@@ -8,12 +8,15 @@ const axiosInstance = axios.create({
 	},
 });
 
+// access_token 사용시
+/*
 axiosInstance.interceptors.request.use((request) => {
 	const ACCESS_TOKEN = process.env.REACT_APP_GITHUB_ACCESS_TOKEN;
 	if (ACCESS_TOKEN) request.headers['Authorization'] = `Bearer ${ACCESS_TOKEN}`;
 	if (!ACCESS_TOKEN) request.headers['Authorization'] = '';
 	return request;
 });
+*/
 
 export const getIssueList = async (queryParams) => {
 	const response = await axiosInstance.get(
