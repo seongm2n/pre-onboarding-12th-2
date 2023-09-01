@@ -1,9 +1,8 @@
-# 12차프리온보딩 프론트엔드 인턴십 2주차 과제
+# 12차 프리온보딩 프론트엔드 인턴십 2주차 과제 
 
-### 🗓️ 진행 기간
+</br>
 
-### 2023.08.29 ~ 2023.09.01
-
+<td align="center"><a href="https://github.com/seongm2n"><img align="center" width="50" height="50" src="https://avatars.githubusercontent.com/u/62044613?v=4"/><br /><sub><h3>신성민</h3></sub></a><br /></td>
 </br>
 
 ## 배포 링크
@@ -60,6 +59,7 @@
 ```
 
 </br>
+
 ## 프로젝트 설치 및 실행
 
 프로젝트 패키지 설치
@@ -76,25 +76,28 @@ npm start
 
 </br>
 
-## ✨ 주요 기능 목표 및 구현 설명
+## 주요 기능 목표 및 구현 설명
 
 ### 이슈 목록 화면
-
-#### 구현
 
 - **이슈 목록 가져오기 API 활용**  
   → `Axios` 라이브러리 사용  
   → contextAPI 사용하여 issueContext의 state와 dispatch함수를 가져와서 컴포넌트 상태관리  
   → 페이지가 마운트되면 useEffect훅 사용으로 loadMore함수를 호출하여 초기 issue데이터 불러옴
+  </br>
+
 - **open 상태의 이슈 중 코멘트가 많은 순으로 정렬**  
   → getIssueList api 함수 호출시 query params로 sort:”comments”, per_page:20, page, state:”open”, direction: 'desc', 설정
+  </br>
 - **각 행에는 '이슈번호, 이슈제목, 작성자, 작성일, 코멘트수'를 표시**  
   → issue 상세페이지에서 재사용할 수 있음으로 issueItem으로 컴포넌트 생성  
   → issueList에서 받은 issue에 객체에서 number, title, comments, user, created_at 을 각각의 변수로 추출해서 할당  
   → 작성일은 Date객체로 년(getFullYear), 월(getMonth()+1), 일(getDate()) 메서드 사용해서 날짜 형식 변환
+  </br>
 - **다섯번째 셀마다 광고 이미지 출력**  
   → 5번째 셀이 index값으로는 4니까… issue를 보여주면서 index값을 사용하여 각 4번째 이슈마다 광고를 출력  
   {index >0 && index % 4 === 3 } (index가 3,7,11,15…일때)
+  </br>
 - **화면을 아래로 스크롤 할 시 이슈 목록 추가 로딩(인피니티 스크롤)**  
   → `useEffect`로 윈도우 스크롤 이벤트를 감지해서 페이지 맨 아래에 가까워지면 loadMore 함수를 호출하여 추가issue를 불러옴
 
@@ -102,45 +105,38 @@ npm start
 
 ### 이슈 상세 화면
 
-#### 구현
-
 - **이슈의 상세 내용 표시**  
   → `useEffect`로 `getIssueDetail` api함수를 호출해서 issue 상세정보 가져옴  
   → issue 상태가 없으면 Loading 표시  
-  → 마크다운 렌더링을 @uiw/react-markdown-preview 라이브러리 사용
+  → 마크다운 렌더링 :  @uiw/react-markdown-preview 라이브러리 사용
+  </br>
 - **'이슈번호, 이슈제목, 작성자, 작성일, 코멘트 수, 작성자 프로필 이미지, 본문' 표시**  
    → 이슈번호, 이슈제목, 작성자, 작성일, 코멘트 수는 issue리스트에 보여지는 것과 동일하므로 재사용  
    → 프로필 이미지, 본문은 상세페이지 api에서 받아온 데이터사용
 
   </br>
 
----
 
 ### 공통 헤더
 
-#### 구현
-
 - **두 페이지는 공통 헤더를 공유합니다.**  
   → Header를 상단에 두고 하위 라우터 컴포넌트를 Outlet으로 두어 issue리스트페이지와 issue상세 페이지 모두 공통으로 헤더 공유
+  </br>
 - **헤더에는 Organization Name / Repository Name이 표시됩니다.**  
   → 하드코딩으로 표시
 
 </br>
 
----
 
-### ‼️ 필수 요구사항
+## ‼️ 필수 요구사항
 
 ### 에러 처리
-
-#### 구현
 
 - **에러 화면 구현**  
   → `createBrowserRouter`의 `errorElement` 사용시 error 발생하면 error페이지로 이동
 
 ### 데이터 요청 중 로딩 처리
 
-#### 구현
-
 - **데이터 요청 중 로딩 표시**  
-  → `context api`에서 loding을 useState를 사용하여 상태 관리
+  → `useIssueContext` 함수를 사용하여 `state` 객체를 가져와서, 필요한 곳에서 loading 상태를 변경하거나 확인  
+  (예를 들면, 데이터를 가져오는 API 요청을 시작할 때 SET_LOADING 액션을 dispatch하여 loading을 true로 설정하고, 데이터가 성공적으로 로드되면 다시 false로 설정하여 로딩 상태를 관리)
