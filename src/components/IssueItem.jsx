@@ -8,7 +8,9 @@ function IssueItem({ issue }) {
 	return (
 		<Layout>
 			<Info>
-				<h1>{`#${number} ${title}`}</h1>
+				<h1>
+					<span className='issue-number'>{`#${number}`}</span> {title}
+				</h1>
 				<p>
 					작성자: {user.login}, 작성일: {dateToKorea(created_at)}
 				</p>
@@ -46,6 +48,10 @@ const Info = styled.div`
 		font-size: 1rem;
 		margin-bottom: 10px;
 		width: 750px;
+	}
+	.issue-number {
+		color: #f98296;
+		font-size: 1.1rem;
 	}
 
 	p {
