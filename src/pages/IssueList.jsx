@@ -28,6 +28,7 @@ function IssueList() {
 				per_page: 30,
 				page: state.page,
 				state: 'open',
+				direction: 'desc',
 			});
 			if (newIssues && newIssues.length > 0) {
 				dispatch({ type: 'ADD_ISSUES', payload: newIssues });
@@ -64,11 +65,14 @@ function IssueList() {
 		<Container>
 			<Ul>
 				{uniqueIssues.map((issue, index) => (
-					<React.Fragment key={issue.number}>
+					<React.Fragment key={`${issue.number}-${index}`}>
 						<Link
 							to={`/repos/${API_URL.owner}/${API_URL.repo}/issues/${issue.number}`}
 						>
-							<IssueItem issue={issue} />
+							<IssueItem
+								issue={issue}
+								index={index}
+							/>
 						</Link>
 						{index % 4 === 3 && (
 							<Link to={`${AD_URL.to}`}>
